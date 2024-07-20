@@ -11,6 +11,7 @@ namespace
         hq.start();
         std::this_thread::sleep_for(std::chrono::seconds(12));
         hq.stop();
+        cout << "test" << endl;
         hq.print2txt();
     }
 }
