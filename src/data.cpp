@@ -33,8 +33,10 @@ void HQInfo::update()
         time_t timestamp = chrono::system_clock::to_time_t(now);
         /* SepNote 这里其实是一个重载的(),  接受一个默认的随机数生成器, 生成一个均匀分布的随机数, 区间由创建均匀分布时的参数给定, 依然是经典的左开右闭*/
         double price = distribution(generator);
-        // SepNote 记录一个现象, 这里使用emplace_back会报错
+        // SepNote 记录一个现象, 这里使用emplace_back会报错. 更新, 是直接emplace_back({price, timestamp}会报错, 暂时不知道为什么 不过现在即使是push_back, 也是支持右值push的, 所以统一使用push_back算了
         ST_MARKET_DATA tmp_data = {price, timestamp};
+        // m_vec.emplace_back({price, timestamp});
+        m_vec.push_back({price, timestamp});
         m_vec.push_back(tmp_data);
 
         // SepNote lower_bound底层是基于二分查找的, 第三个参数是要查找的元素, 第四个参数是个二元谓词, 二元谓词的第一个参数接受迭代器区间内的每个迭代器, 所以要求能用迭代器在解引用后能隐式转换, 二元谓词的第二个参数要求能用第三个参数隐式转换. 二位谓词的作用是提供一个能在迭代器和查找元素之间比较先序关系(即< )的函数, 注意不包含等于
